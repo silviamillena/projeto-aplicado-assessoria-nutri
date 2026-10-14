@@ -1,0 +1,67 @@
+name: Deploy Automático - Servidor Oracle Cloud (UNCISAL)
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do Código
+        uses: actions/checkout@v4
+
+      - name: Configurar Chave SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+            ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Executar Deploy e Atualização no Servidor Oracle Cloud
+        env:
+          HOST_IP: ${{ secrets.HOST_IP }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          ADMIN_USER: ${{ secrets.ADMIN_USER }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+        run: |
+          # Desativa o Strict Host Key Checking para evitar interrupções na primeira conexão
+          mkdir -p ~/.ssh
+          echo "StrictHostKeyChecking no" >> ~/.ssh/config
+
+          # Conecta via SSH, prepara o ambiente, injeta as variáveis de ambiente no .env e reinicia os serviços
+          ssh $SSH_USER@$HOST_IP << 'EOF'
+            set -e
+            
+            # Cria ou atualiza a pasta do projeto no servidor
+            mkdir -p /home/ubuntu/app_nutricao
+            cd /home/ubuntu/app_nutricao
+
+            # Se já for um repositório git, atualiza; caso contrário, prepara
+            if [ -d ".git" ]; then
+              git pull origin main
+            else
+              # Se ainda não houver git clonado na VM, clona do seu repositório público
+              git clone https://github.com/silviamillena/projeto-aplicado-assessoria-nutri.git .
+            fi
+
+            # Cria/Atualiza de forma segura o arquivo .env no servidor usando os Secrets do GitHub
+            cat << 'ENVFILE' > .env
+            GROQ_API_KEY=${{ secrets.GROQ_API_KEY }}
+            SECRET_KEY=${{ secrets.SECRET_KEY }}
+            ADMIN_USER=${{ secrets.ADMIN_USER }}
+            ADMIN_PASSWORD=${{ secrets.ADMIN_PASSWORD }}
+            ENVFILE
+
+            # Configura o ambiente virtual Python se não existir
+            if [ ! -d "venv" ]; then
+              python3 -m venv venv
+            fi
+
+            # Ativa o venv e instala as dependências
+            source venv/bin/activate
+            pip install --upgrade pip
+            pip install -r requirements.txt
+
+            echo "Deploy concluído com sucesso no servidor Oracle Cloud!"
+          EOF
