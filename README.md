@@ -34,6 +34,14 @@ Como requisito central da Pós-Graduação em Segurança da Informação, o soft
 * **Proteção de Proxy Reverso:** Utilização do middleware `ProxyFix` para inibir a falsificação de cabeçalhos `X-Forwarded-For` e tentativas de mascaramento de IP por agentes maliciosos.
 * **Controle de Acesso Restrito:** Todas as rotas sensíveis e de gestão de ficheiros estão rigidamente protegidas pelo decorator `@login_required`. Acessos não autenticados são barrados na origem.
 
+### OWASP A02:2025 - Security Misconfiguration
+* **Proteção de Ambiente e Cookies:** Eliminação de credenciais "hardcoded" (com geração de `SECRET_KEY` criptográfica dinâmica) e configuração estrita de flags em cookies de sessão (`HttpOnly=True`, `SameSite='Lax'`, e `Secure=True`).
+* **Modo de Produção:** Desativação do modo de depuração (`debug=False`), prevenindo vazamento de stacktraces.
+
+### OWASP A04:2025 - Cryptographic Failures
+* **Isolamento de Segredos:** Gestão de chaves (`GROQ_API_KEY`) exclusivamente via `.env` protegido, sem exposição em commits.
+* **Criptografia em Trânsito:** Arquitetura desenhada para deploy em nuvem (Oracle Cloud) suportando HTTPS, HSTS e Criptografia Pós-Quântica (PQC).
+
 ### OWASP A05:2025 / A06:2025 - Injection (Stored XSS) e Insecure Design
 * **Limitação de Payload (DoS):** Uploads estritamente restritos a 2MB no nível do servidor para evitar sobrecarga.
 * **Validação de Ficheiros:** O sistema aceita exclusivamente ficheiros com a extensão `.csv`.

@@ -45,60 +45,50 @@
 
         /* Top Navbar */
         .navbar {
-            background: #ffffff;
-            border-bottom: 1px solid var(--gray-200);
-            padding: 14px 24px;
+            background-color: #0f172a;
+            border-bottom: 1px solid #1e293b;
+            padding: 0 24px 0 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: sticky;
             top: 0;
             z-index: 50;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+            min-height: 60px;
         }
 
         .nav-brand {
             display: flex;
             align-items: center;
-            gap: 12px;
+            margin: 0;
+            padding: 0;
+            line-height: 0;
         }
 
-        .nav-logo-icon {
-            background: linear-gradient(135deg, var(--primary) 0%, #0d9488 100%);
-            color: #ffffff;
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            box-shadow: 0 4px 6px -1px rgba(5, 150, 105, 0.3);
-        }
-
-        .nav-title {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 17px;
-            font-weight: 800;
-            color: var(--dark);
-            letter-spacing: -0.3px;
-        }
-
-        .nav-subtitle {
-            font-size: 11px;
-            color: var(--gray-600);
-            font-weight: 500;
+        .navbar-logo {
+            height: 60px;
+            max-width: 100%;
+            object-fit: contain;
+            border-radius: 0;
+            box-shadow: none;
+            margin: 0;
+            padding: 0;
+            display: block;
+            border: none;
         }
 
         .nav-actions {
             display: flex;
             align-items: center;
             gap: 12px;
+            margin: 0;
+            padding: 0;
         }
 
         .btn-plano-atual {
-            background: var(--accent-light);
-            color: var(--accent);
+            background: rgba(2, 132, 199, 0.2);
+            color: #38bdf8;
             text-decoration: none;
             padding: 8px 16px;
             border-radius: 8px;
@@ -107,18 +97,21 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            border: 1px solid #bae6fd;
+            border: 1px solid rgba(56, 189, 248, 0.4);
             transition: all 0.2s ease;
+            backdrop-filter: blur(4px);
         }
 
         .btn-plano-atual:hover {
-            background: var(--accent);
+            background: #0284c7;
             color: #ffffff;
+            border-color: #0284c7;
+            box-shadow: 0 0 12px rgba(2, 132, 199, 0.4);
         }
 
         .btn-logout {
-            background: #fee2e2;
-            color: #b91c1c;
+            background: rgba(239, 68, 68, 0.18);
+            color: #fca5a5;
             text-decoration: none;
             padding: 8px 14px;
             border-radius: 8px;
@@ -127,13 +120,16 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            border: 1px solid #fecaca;
+            border: 1px solid rgba(239, 68, 68, 0.4);
             transition: all 0.2s ease;
+            backdrop-filter: blur(4px);
         }
 
         .btn-logout:hover {
-            background: var(--danger);
+            background: #ef4444;
             color: #ffffff;
+            border-color: #ef4444;
+            box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
         }
 
         /* Container Principal */
@@ -173,55 +169,297 @@
             border: 1px solid #a7f3d0;
         }
 
-        /* Banner de Status do Último Paciente */
-        .patient-banner {
-            background: linear-gradient(135deg, #064e3b 0%, #0f172a 100%);
-            color: #ffffff;
+        /* Seletor de Modo Clínico: Nova Avaliação vs Continuidade */
+        .mode-selection-container {
+            margin-bottom: 24px;
+        }
+
+        .mode-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .mode-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .mode-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 22px 24px;
             border-radius: 14px;
-            padding: 22px 26px;
-            margin-bottom: 26px;
+            text-decoration: none;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+        }
+
+        .mode-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -3px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Botão 1: Verde Principal */
+        .mode-card-primary {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            color: #ffffff;
+            border: 1.5px solid #10b981;
+        }
+
+        .mode-card-primary.active {
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.35), 0 10px 20px -3px rgba(5, 150, 105, 0.3);
+            border-color: #34d399;
+        }
+
+        .mode-card-primary .mode-card-title {
+            color: #ffffff;
+        }
+
+        .mode-card-primary .mode-card-desc {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .mode-card-primary .mode-card-icon {
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+        }
+
+        .mode-badge-primary {
+            background: rgba(255, 255, 255, 0.25);
+            color: #ffffff;
+        }
+
+        /* Botão 2: Azul/Cinza Escuro Secundário */
+        .mode-card-secondary {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #ffffff;
+            border: 1.5px solid #334155;
+        }
+
+        .mode-card-secondary.active {
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.45), 0 10px 20px -3px rgba(15, 23, 42, 0.4);
+            border-color: #38bdf8;
+        }
+
+        .mode-card-secondary .mode-card-title {
+            color: #ffffff;
+        }
+
+        .mode-card-secondary .mode-card-desc {
+            color: #cbd5e1;
+        }
+
+        .mode-card-secondary .mode-card-icon {
+            background: rgba(255, 255, 255, 0.1);
+            color: #38bdf8;
+        }
+
+        .mode-badge-secondary {
+            background: rgba(56, 189, 248, 0.2);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+
+        .mode-card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+            backdrop-filter: blur(4px);
+        }
+
+        .mode-card-body {
+            flex: 1;
+        }
+
+        .mode-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .mode-card-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .mode-badge {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 3px 8px;
+            border-radius: 6px;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+        }
+
+        .mode-card-desc {
+            font-size: 12px;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        /* Resumo do Histórico Clínico */
+        .history-summary-box {
+            background: #ffffff;
+            border: 1.5px solid #0284c7;
+            border-radius: 14px;
+            padding: 22px 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 16px rgba(2, 132, 199, 0.1);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .history-summary-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 16px;
-            box-shadow: 0 10px 25px -5px rgba(6, 78, 59, 0.2);
+            gap: 14px;
+            margin-bottom: 16px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--gray-200);
         }
 
-        .patient-banner-info h3 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 17px;
-            font-weight: 700;
-            margin-bottom: 6px;
+        .history-title-group {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
         }
 
-        .patient-banner-info p {
-            font-size: 13px;
-            color: #cbd5e1;
-            line-height: 1.4;
+        .history-icon {
+            font-size: 26px;
+            background: var(--accent-light);
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #bae6fd;
         }
 
-        .btn-view-current {
-            background: #10b981;
-            color: #ffffff;
-            text-decoration: none;
-            padding: 10px 18px;
-            border-radius: 8px;
-            font-size: 13px;
+        .history-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 15px;
             font-weight: 700;
+            color: var(--dark);
+            margin: 0;
+        }
+
+        .history-subtitle {
+            font-size: 12px;
+            color: var(--gray-600);
+            margin: 3px 0 0 0;
+        }
+
+        .btn-history-view {
+            background: var(--accent-light);
+            color: var(--accent);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
+            border: 1px solid #bae6fd;
             transition: all 0.2s ease;
+        }
+
+        .btn-history-view:hover {
+            background: var(--accent);
+            color: #ffffff;
+        }
+
+        .history-table-wrapper {
+            overflow-x: auto;
+            border: 1px solid var(--gray-200);
+            border-radius: 10px;
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            text-align: left;
+            background: #ffffff;
             white-space: nowrap;
         }
 
-        .btn-view-current:hover {
-            background: #059669;
-            transform: translateY(-1px);
+        .history-table th {
+            background: #f8fafc;
+            color: var(--gray-600);
+            font-weight: 700;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .history-table td {
+            padding: 12px 14px;
+            border-bottom: 1px solid #f1f5f9;
+            color: var(--dark);
+        }
+
+        .history-table td .unit {
+            font-size: 11px;
+            color: var(--gray-600);
+            font-weight: normal;
+        }
+
+        .highlight-val {
+            color: var(--dark);
+            font-size: 14px;
+        }
+
+        .highlight-accent {
+            color: #0284c7;
+            font-size: 14px;
+        }
+
+        .highlight-green {
+            color: #059669;
+            font-size: 14px;
+        }
+
+        .badge-estrategia {
+            background: #ecfdf5;
+            color: #047857;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            border: 1px solid #a7f3d0;
+            display: inline-block;
+        }
+
+        .history-note {
+            margin-top: 14px;
+            padding: 10px 14px;
+            background: #fffbeb;
+            border: 1px solid #fef3c7;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #92400e;
         }
 
         /* Layout Grid do Painel */
@@ -540,11 +778,7 @@
     <!-- Barra de Navegação Superior -->
     <header class="navbar">
         <div class="nav-brand">
-            <div class="nav-logo-icon">🥗</div>
-            <div>
-                <div class="nav-title">Assessoria Nutricional</div>
-                <div class="nav-subtitle">Bioimpedância Segmental Tanita (8 Eletrodos)</div>
-            </div>
+            <img src="{{ url_for('static', filename='img/Logo barra.jpg') }}" alt="Nutri_IA" class="navbar-logo">
         </div>
         <div class="nav-actions">
             {% if tem_plano_anterior %}
@@ -575,22 +809,94 @@
           {% endif %}
         {% endwith %}
 
-        <!-- Se já houver um plano salvo, exibir banner de atalho -->
-        {% if tem_plano_anterior %}
-        <section class="patient-banner">
-            <div class="patient-banner-info">
-                <h3><span>👤</span> Paciente em Acompanhamento: {{ paciente_anterior.nome_paciente or 'Cadastrado' }} ({{ paciente_anterior.id_paciente or 'PAC-001' }})</h3>
-                <p>
-                    Estratégia: <strong>{{ paciente_anterior.estrategia_calorica or 'Dieta Hipocalórica' }}</strong> | 
-                    Atividade: <strong>{{ paciente_anterior.nivel_atividade or 'Moderadamente Ativo (1.55)' }}</strong> | 
-                    GET: <strong>{{ paciente_anterior.get_kcal or '-' }} kcal</strong> | 
-                    Meta: <strong>{{ paciente_anterior.meta_calorica_kcal or '-' }} kcal</strong><br>
-                    Restrições: <strong>{{ paciente_anterior.restricoes_clinicas or 'Nenhuma restrição' }}</strong>
-                </p>
+        <!-- Bloco de Ações Clínicas: Nova Avaliação vs Continuidade -->
+        <section class="mode-selection-container">
+            <div class="mode-grid">
+                
+                <!-- Botão 1 (Esquerda): Nova Avaliação de Bioimpedância -->
+                <a href="/nova_avaliacao" class="mode-card mode-card-primary {{ 'active' if not modo_historico else '' }}">
+                    <div class="mode-card-icon">➕</div>
+                    <div class="mode-card-body">
+                        <div class="mode-card-header">
+                            <h3 class="mode-card-title">Nova Avaliação de Bioimpedância</h3>
+                            <span class="mode-badge mode-badge-primary">Novo Exame</span>
+                        </div>
+                        <p class="mode-card-desc">Iniciar avaliação do zero. Limpa a tela para importação de um novo arquivo CSV da balança Tanita.</p>
+                    </div>
+                </a>
+
+                <!-- Botão 2 (Direita): Continuidade (Carregar Histórico) -->
+                <a href="/carregar_historico" class="mode-card mode-card-secondary {{ 'active' if modo_historico else '' }}">
+                    <div class="mode-card-icon">📂</div>
+                    <div class="mode-card-body">
+                        <div class="mode-card-header">
+                            <h3 class="mode-card-title">Continuidade (Carregar Histórico)</h3>
+                            <span class="mode-badge mode-badge-secondary">Histórico Salvo</span>
+                        </div>
+                        <p class="mode-card-desc">Recupera os parâmetros biométricos do último paciente registrado no sistema para acompanhamento evolutivo.</p>
+                    </div>
+                </a>
+
             </div>
-            <a href="/plano_atual" class="btn-view-current">
-                Abrir Rascunho Clínico Salvo ➔
-            </a>
+        </section>
+
+        <!-- Resumo do Histórico (Exibido apenas quando Continuidade é ativada) -->
+        {% if modo_historico and paciente_anterior %}
+        <section class="history-summary-box">
+            <div class="history-summary-header">
+                <div class="history-title-group">
+                    <span class="history-icon">📊</span>
+                    <div>
+                        <h3 class="history-title">Resumo do Histórico: <strong>{{ paciente_anterior.nome_paciente or 'Paciente Cadastrado' }}</strong> ({{ paciente_anterior.id_paciente or 'PAC-001' }})</h3>
+                        <p class="history-subtitle">
+                            Idade: <strong>{{ paciente_anterior.idade or '-' }} anos</strong> • 
+                            Sexo: <strong>{{ paciente_anterior.sexo_biologico or '-' }}</strong> • 
+                            Objetivo: <strong>{{ paciente_anterior.objetivo_principal or '-' }}</strong> • 
+                            Registro: <strong>{{ dados_completos.data_processamento or 'Gravado no sistema' }}</strong>
+                        </p>
+                    </div>
+                </div>
+                <div class="history-actions">
+                    <a href="/plano_atual" class="btn-history-view">
+                        📋 Abrir Rascunho Clínico Salvo ➔
+                    </a>
+                </div>
+            </div>
+
+            <div class="history-table-wrapper">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Peso Atual</th>
+                            <th>% Gordura Total</th>
+                            <th>Massa Muscular</th>
+                            <th>Gordura Tronco</th>
+                            <th>Gordura Visceral</th>
+                            <th>Idade Metabólica</th>
+                            <th>TMB Estimada</th>
+                            <th>Estratégia Prescrita</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong class="highlight-val">{{ bloco8.peso_kg or paciente_anterior.peso_kg or '-' }}</strong> <span class="unit">kg</span></td>
+                            <td><strong class="highlight-accent">{{ bloco8.perc_gordura_total or '-' }}</strong> <span class="unit">%</span></td>
+                            <td><strong class="highlight-green">{{ bloco8.massa_muscular_total_kg or '-' }}</strong> <span class="unit">kg</span></td>
+                            <td><strong>{{ bloco8.perc_gordura_tronco or '-' }}</strong> <span class="unit">%</span></td>
+                            <td><strong>Nível {{ bloco8.gordura_visceral_rating or '-' }}</strong></td>
+                            <td><strong>{{ bloco8.idade_metabolica_anos or '-' }}</strong> <span class="unit">anos</span></td>
+                            <td><strong>{{ bloco8.tmb_tanita_kcal or '-' }}</strong> <span class="unit">kcal</span></td>
+                            <td><span class="badge-estrategia">{{ bloco8.estrategia_calorica or paciente_anterior.estrategia_calorica or '-' }}</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            {% if bloco8.alerta_segmental %}
+            <div class="history-note">
+                ⚡ <strong>Alerta de Dispersão Segmental:</strong> {{ bloco8.alerta_segmental }}
+            </div>
+            {% endif %}
         </section>
         {% endif %}
 
@@ -873,7 +1179,7 @@
     <!-- Rodapé Acadêmico -->
     <footer class="footer">
         Universidade Estadual de Ciências da Saúde de Alagoas (UNCISAL) • Pós-Graduação em Segurança da Informação<br>
-        Projeto Aplicado: Práticas de Mercado • Aluna: <strong>Silvia Millena Rocha Torres</strong>
+        Projeto Aplicado: Práticas de Mercado
     </footer>
 
     <!-- Lógica JavaScript dos Seletores e Upload -->

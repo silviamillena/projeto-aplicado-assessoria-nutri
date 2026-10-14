@@ -37,12 +37,103 @@
             background-color: #f1f5f9;
             color: #1e293b;
             line-height: 1.6;
-            padding: 24px 16px;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Top Navbar */
+        .navbar {
+            background-color: #0f172a;
+            border-bottom: 1px solid #1e293b;
+            padding: 0 24px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+            min-height: 60px;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            line-height: 0;
+        }
+
+        .navbar-logo {
+            height: 60px;
+            max-width: 100%;
+            object-fit: contain;
+            border-radius: 0;
+            box-shadow: none;
+            margin: 0;
+            padding: 0;
+            display: block;
+            border: none;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .btn-plano-atual {
+            background: rgba(2, 132, 199, 0.2);
+            color: #38bdf8;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            transition: all 0.2s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        .btn-plano-atual:hover {
+            background: #0284c7;
+            color: #ffffff;
+            border-color: #0284c7;
+            box-shadow: 0 0 12px rgba(2, 132, 199, 0.4);
+        }
+
+        .btn-logout {
+            background: rgba(239, 68, 68, 0.18);
+            color: #fca5a5;
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            transition: all 0.2s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        .btn-logout:hover {
+            background: #ef4444;
+            color: #ffffff;
+            border-color: #ef4444;
+            box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
         }
 
         .container {
             max-width: 1040px;
-            margin: 0 auto;
+            margin: 24px auto;
+            padding: 0 16px;
         }
 
         /* Barra de Ações Topo */
@@ -109,9 +200,18 @@
             margin-bottom: 24px;
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center;
             flex-wrap: wrap;
             gap: 16px;
+        }
+
+        .header-logo-img {
+            height: 60px;
+            max-width: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+            display: block;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         }
 
         .header-title h1 {
@@ -360,7 +460,7 @@
                 padding: 0;
                 color: #000000;
             }
-            .actions-bar, details, footer {
+            .navbar, .actions-bar, details, footer {
                 display: none !important;
             }
             .card-clinico {
@@ -376,6 +476,23 @@
     </style>
 </head>
 <body>
+
+    <!-- Barra de Navegação Superior -->
+    <header class="navbar">
+        <div class="nav-brand">
+            <a href="/" style="display: flex; margin: 0; padding: 0; text-decoration: none;">
+                <img src="{{ url_for('static', filename='img/Logo barra.jpg') }}" alt="Nutri_IA" class="navbar-logo">
+            </a>
+        </div>
+        <div class="nav-actions">
+            <a href="/" class="btn-plano-atual">
+                📋 Visualizar Último Plano
+            </a>
+            <a href="/logout" class="btn-logout">
+                🚪 Encerrar Sessão
+            </a>
+        </div>
+    </header>
 
     <div class="container">
         
@@ -521,7 +638,8 @@
 
         <!-- Rodapé Acadêmico -->
         <footer style="text-align: center; font-size: 12px; color: #64748b; margin-top: 20px;">
-            Projeto Aplicado: Práticas de Mercado • UNCISAL • Aluna: <strong>Silvia Millena Rocha Torres</strong>
+            UNCISAL • Pós-Graduação em Segurança da Informação<br>
+            Projeto Aplicado: Práticas de Mercado
         </footer>
 
     </div>

@@ -55,45 +55,8 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .header-section {
-            background: linear-gradient(135deg, #059669 0%, #0d9488 100%);
-            padding: 35px 30px;
-            text-align: center;
-            color: #ffffff;
-        }
-
-        .badge-clinico {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 4px 12px;
-            border-radius: 9999px;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            margin-bottom: 12px;
-            backdrop-filter: blur(4px);
-        }
-
-        .header-section h1 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 22px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            line-height: 1.2;
-            margin-bottom: 6px;
-        }
-
-        .header-section p {
-            font-size: 13px;
-            opacity: 0.9;
-            font-weight: 400;
-        }
-
         .form-section {
-            padding: 32px 30px;
+            padding: 16px 30px 32px 30px;
         }
 
         .flash-alerts {
@@ -219,12 +182,11 @@
 <body>
 
     <div class="login-card">
-        <div class="header-section">
-            <div class="badge-clinico">
-                <span>🛡️ OWASP Protected</span>
-            </div>
-            <h1>Assessoria Nutricional</h1>
-            <p>Bioimpedância Segmental Tanita (8 Eletrodos)</p>
+        <div style="width: 100%; border-top-left-radius: 12px; border-top-right-radius: 12px; overflow: hidden; background-color: #ffffff; margin: 0; padding: 0;">
+            <img src="{{ url_for('static', filename='img/Logo maior.jpg') }}" alt="Nutri_IA" style="width: 100%; display: block; object-fit: cover;">
+        </div>
+        <div style="text-align: center; padding: 25px 20px 10px 20px; background-color: #ffffff;">
+            <h4 style="color: #1e293b; margin: 0; font-weight: bold; font-size: 16px;">Bioimpedância Segmental de 8 Eletrodos</h4>
         </div>
 
         <div class="form-section">
@@ -268,7 +230,7 @@
 
         <div class="academic-footer">
             UNCISAL • Pós-Graduação em Segurança da Informação<br>
-            Projeto Aplicado: Práticas de Mercado • <strong>Silvia Millena Rocha Torres</strong>
+            Projeto Aplicado: Práticas de Mercado
         </div>
     </div>
 

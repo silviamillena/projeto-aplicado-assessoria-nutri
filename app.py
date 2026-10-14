@@ -7,6 +7,7 @@ import csv
 import html
 import hmac
 import uuid
+import secrets
 from werkzeug.middleware.proxy_fix import ProxyFix
 from datetime import datetime
 from dotenv import load_dotenv
@@ -47,8 +48,16 @@ except Exception:
 
 app = Flask(__name__)
 
+# Configurações Explícitas de Segurança para Cookies de Sessão (OWASP A01:2025 / A07:2025)
+app.config.update(
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE='Lax',
+    SESSION_COOKIE_SECURE=True 
+)
+
 # Mitigação OWASP A02/A04: Chave de sessão configurada via ambiente para evitar adulteração de cookies
-app.secret_key = os.getenv("SECRET_KEY", "chave_super_secreta_assessoria_nutricional_uncisal_2026")
+# Se SECRET_KEY não for informada no .env, gera uma chave criptográfica forte dinamicamente
+app.secret_key = os.getenv("SECRET_KEY") or secrets.token_hex(32)
 
 # Mitigação OWASP A01/A07: ProxyFix para Nginx na Oracle Cloud (previne IP Spoofing em Rate Limiting)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
@@ -120,8 +129,12 @@ def login():
         usuario = request.form.get('usuario', '')
         senha = request.form.get('senha', '')
         
-        ADMIN_USER = os.getenv("ADMIN_USER", "nutri")
-        ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "nutri2026")
+        ADMIN_USER = os.getenv("ADMIN_USER")
+        ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
+        
+        if not ADMIN_USER or not ADMIN_PASSWORD:
+            flash('Erro de Configuração de Segurança: As credenciais do sistema não foram configuradas no arquivo .env.', 'error')
+            return render_template('login.html')
         
         # Mitigação OWASP A07:2025: Comparação em tempo constante contra Timing Attacks
         if hmac.compare_digest(usuario, ADMIN_USER) and hmac.compare_digest(senha, ADMIN_PASSWORD):
@@ -156,9 +169,40 @@ def painel():
     dados = carregar_dados_paciente()
     tem_plano_anterior = bool(dados.get("ultimo_plano_html"))
     paciente_anterior = dados.get("paciente_info", {})
+    bloco8 = dados.get("bloco8", {})
+    modo_historico = session.get('modo_historico', False)
+    
     return render_template('painel.html', 
                            tem_plano_anterior=tem_plano_anterior, 
-                           paciente_anterior=paciente_anterior)
+                           paciente_anterior=paciente_anterior,
+                           bloco8=bloco8,
+                           modo_historico=modo_historico,
+                           dados_completos=dados if modo_historico else {})
+
+@app.route('/nova_avaliacao')
+@login_required
+def nova_avaliacao():
+    usuario = session.get('usuario')
+    session.clear()
+    session['logado'] = True
+    session['usuario'] = usuario
+    session['modo_historico'] = False
+    flash('Nova avaliação iniciada! Painel limpo e pronto para o upload de um novo exame CSV.', 'success')
+    return redirect('/')
+
+@app.route('/carregar_historico')
+@login_required
+def carregar_historico():
+    dados = carregar_dados_paciente()
+    if not dados or not dados.get("paciente_info"):
+        flash('Nenhum histórico anterior encontrado em dados_paciente.json. Por favor, envie um novo arquivo CSV.', 'error')
+        session['modo_historico'] = False
+        return redirect('/')
+    
+    session['modo_historico'] = True
+    nome_paciente = dados.get("paciente_info", {}).get("nome_paciente", "Cadastrado")
+    flash(f'Histórico do paciente "{nome_paciente}" carregado com sucesso! Confira o resumo dos dados abaixo.', 'success')
+    return redirect('/')
 
 def converter_float(valor, padrao=0.0):
     try:
@@ -541,6 +585,7 @@ Obrigatório cobrir:
                 "data_processamento": datetime.now().strftime("%d/%m/%Y %H:%M:%S")
             }
             salvar_dados_paciente(dados_salvos)
+            session['modo_historico'] = True
 
             return render_template('analise.html', 
                                    prompt=prompt_ia, 
