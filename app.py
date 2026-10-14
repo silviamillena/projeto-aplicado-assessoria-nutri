@@ -626,3 +626,4 @@ if __name__ == '__main__':
     # Mitigação OWASP A02:2025: debug=False para impedir execução remota e vazamento de stacktrace
     porta = int(os.getenv("PORT", 5000))
     app.run(host='0.0.0.0', port=porta, debug=False)
+
