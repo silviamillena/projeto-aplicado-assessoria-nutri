@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Nutricionista - Assessoria Tanita 8 Eletrodos</title>
+    <!-- Fontes Google Inter e Montserrat -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #059669;
+            --primary-dark: #047857;
+            --primary-light: #ecfdf5;
+            --accent: #0284c7;
+            --accent-light: #e0f2fe;
+            --dark: #0f172a;
+            --dark-surface: #1e293b;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-600: #475569;
+            --gray-800: #1e293b;
+            --danger: #ef4444;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --warning-light: #fffbeb;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Navbar */
+        .navbar {
+            background: #ffffff;
+            border-bottom: 1px solid var(--gray-200);
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-logo-icon {
+            background: linear-gradient(135deg, var(--primary) 0%, #0d9488 100%);
+            color: #ffffff;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 4px 6px -1px rgba(5, 150, 105, 0.3);
+        }
+
+        .nav-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 17px;
+            font-weight: 800;
+            color: var(--dark);
+            letter-spacing: -0.3px;
+        }
+
+        .nav-subtitle {
+            font-size: 11px;
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-plano-atual {
+            background: var(--accent-light);
+            color: var(--accent);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid #bae6fd;
+            transition: all 0.2s ease;
+        }
+
+        .btn-plano-atual:hover {
+            background: var(--accent);
+            color: #ffffff;
+        }
+
+        .btn-logout {
+            background: #fee2e2;
+            color: #b91c1c;
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid #fecaca;
+            transition: all 0.2s ease;
+        }
+
+        .btn-logout:hover {
+            background: var(--danger);
+            color: #ffffff;
+        }
+
+        /* Container Principal */
+        .main-container {
+            max-width: 1140px;
+            margin: 26px auto;
+            padding: 0 20px;
+            flex: 1;
+            width: 100%;
+        }
+
+        /* Alertas Flash */
+        .flash-container {
+            margin-bottom: 24px;
+        }
+
+        .flash-msg {
+            padding: 14px 18px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .flash-error {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .flash-success {
+            background: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        /* Banner de Status do Último Paciente */
+        .patient-banner {
+            background: linear-gradient(135deg, #064e3b 0%, #0f172a 100%);
+            color: #ffffff;
+            border-radius: 14px;
+            padding: 22px 26px;
+            margin-bottom: 26px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            box-shadow: 0 10px 25px -5px rgba(6, 78, 59, 0.2);
+        }
+
+        .patient-banner-info h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .patient-banner-info p {
+            font-size: 13px;
+            color: #cbd5e1;
+            line-height: 1.4;
+        }
+
+        .btn-view-current {
+            background: #10b981;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .btn-view-current:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+
+        /* Layout Grid do Painel */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 26px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 960px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 26px;
+            border: 1px solid var(--gray-200);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .card-header-icon {
+            font-size: 24px;
+        }
+
+        .card-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .card-subtitle {
+            font-size: 12px;
+            color: var(--gray-600);
+        }
+
+        /* Área de Upload */
+        .upload-dropzone {
+            border: 2px dashed #94a3b8;
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 28px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .upload-dropzone:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .upload-dropzone input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .dropzone-icon {
+            font-size: 38px;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .dropzone-text-main {
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+
+        .dropzone-text-sub {
+            font-size: 12px;
+            color: var(--gray-600);
+        }
+
+        .selected-file-info {
+            margin-top: 12px;
+            font-size: 13px;
+            color: var(--primary-dark);
+            font-weight: 600;
+            display: none;
+            padding: 8px 12px;
+            background: #d1fae5;
+            border-radius: 6px;
+        }
+
+        /* --- SELETORES CLÍNICOS MODERNOS --- */
+        .section-selector {
+            background: #f8fafc;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 18px 20px;
+            margin-bottom: 20px;
+        }
+
+        .selector-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .selector-header-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .selector-header-badge {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .selector-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        /* Estilo dos Cards/Pills de Seleção */
+        .choice-card {
+            display: block;
+            position: relative;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .choice-card input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .choice-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: #ffffff;
+            border: 1.5px solid var(--gray-200);
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .choice-card:hover .choice-content {
+            border-color: var(--primary);
+            background: #fafafa;
+        }
+
+        .choice-card input:checked + .choice-content {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            box-shadow: 0 0 0 1px var(--primary);
+        }
+
+        .choice-text {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .choice-icon {
+            font-size: 16px;
+        }
+
+        .choice-card input:checked + .choice-content .choice-text {
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+
+        .choice-badge {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            background: #e2e8f0;
+            color: #334155;
+            white-space: nowrap;
+        }
+
+        .choice-card input:checked + .choice-content .choice-badge {
+            background: var(--primary);
+            color: #ffffff;
+        }
+
+        /* Estilo de Destaque da Opção Exclusiva de Restrições */
+        .choice-card.exclusive-choice input:checked + .choice-content {
+            background: #ecfdf5;
+            border-color: #059669;
+        }
+
+        /* Botão de Envio */
+        .btn-gerar-plano {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: #ffffff;
+            border: none;
+            padding: 16px 20px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-gerar-plano:hover {
+            opacity: 0.95;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(5, 150, 105, 0.35);
+        }
+
+        /* Coluna Lateral de Informações */
+        .info-pills {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+
+        .info-pill {
+            background: #f8fafc;
+            border: 1px solid var(--gray-200);
+            border-radius: 10px;
+            padding: 14px 16px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .info-pill-icon {
+            font-size: 20px;
+            line-height: 1;
+            padding-top: 2px;
+        }
+
+        .info-pill-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 2px;
+        }
+
+        .info-pill-desc {
+            font-size: 12px;
+            color: var(--gray-600);
+            line-height: 1.4;
+        }
+
+        .box-owasp-info {
+            margin-top: 20px;
+            padding: 14px 16px;
+            background: #f1f5f9;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+            font-size: 12px;
+            color: var(--gray-600);
+            line-height: 1.5;
+        }
+
+        .box-owasp-info strong {
+            color: var(--dark);
+        }
+
+        /* Footer */
+        .footer {
+            background: #ffffff;
+            border-top: 1px solid var(--gray-200);
+            padding: 18px 24px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--gray-600);
+            margin-top: 20px;
+        }
+
+        .footer strong {
+            color: var(--dark);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Barra de Navegação Superior -->
+    <header class="navbar">
+        <div class="nav-brand">
+            <div class="nav-logo-icon">🥗</div>
+            <div>
+                <div class="nav-title">Assessoria Nutricional</div>
+                <div class="nav-subtitle">Bioimpedância Segmental Tanita (8 Eletrodos)</div>
+            </div>
+        </div>
+        <div class="nav-actions">
+            {% if tem_plano_anterior %}
+            <a href="/plano_atual" class="btn-plano-atual">
+                📋 Visualizar Último Plano
+            </a>
+            {% endif %}
+            <a href="/logout" class="btn-logout">
+                🚪 Encerrar Sessão
+            </a>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="main-container">
+        
+        <!-- Alertas de Feedback Flash -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="flash-container">
+              {% for category, message in messages %}
+                <div class="flash-msg {{ 'flash-error' if category == 'error' else 'flash-success' }}">
+                    <span>{{ '⚠️' if category == 'error' else '✅' }}</span>
+                    <span>{{ message }}</span>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <!-- Se já houver um plano salvo, exibir banner de atalho -->
+        {% if tem_plano_anterior %}
+        <section class="patient-banner">
+            <div class="patient-banner-info">
+                <h3><span>👤</span> Paciente em Acompanhamento: {{ paciente_anterior.nome_paciente or 'Cadastrado' }} ({{ paciente_anterior.id_paciente or 'PAC-001' }})</h3>
+                <p>
+                    Estratégia: <strong>{{ paciente_anterior.estrategia_calorica or 'Dieta Hipocalórica' }}</strong> | 
+                    Atividade: <strong>{{ paciente_anterior.nivel_atividade or 'Moderadamente Ativo (1.55)' }}</strong> | 
+                    GET: <strong>{{ paciente_anterior.get_kcal or '-' }} kcal</strong> | 
+                    Meta: <strong>{{ paciente_anterior.meta_calorica_kcal or '-' }} kcal</strong><br>
+                    Restrições: <strong>{{ paciente_anterior.restricoes_clinicas or 'Nenhuma restrição' }}</strong>
+                </p>
+            </div>
+            <a href="/plano_atual" class="btn-view-current">
+                Abrir Rascunho Clínico Salvo ➔
+            </a>
+        </section>
+        {% endif %}
+
+        <!-- Grid Principal do Painel -->
+        <div class="dashboard-grid">
+            
+            <!-- Coluna 1: Upload do CSV e Seletores Clínicos -->
+            <section class="card">
+                <div class="card-header">
+                    <span class="card-header-icon">📋</span>
+                    <div>
+                        <h2 class="card-title">Prescrição e Dados da Tanita</h2>
+                        <p class="card-subtitle">Importe a bioimpedância e defina a conduta clínica do paciente</p>
+                    </div>
+                </div>
+
+                <form action="/upload" method="POST" enctype="multipart/form-data" id="form-upload">
+                    
+                    <!-- 1. Upload do Arquivo CSV -->
+                    <div class="upload-dropzone" onclick="document.getElementById('csv-file').click();">
+                        <input type="file" id="csv-file" name="file" accept=".csv" required onchange="atualizarNomeArquivo(this)">
+                        <div class="dropzone-icon">📊</div>
+                        <div class="dropzone-text-main">Clique ou arraste o arquivo CSV da bioimpedância</div>
+                        <div class="dropzone-text-sub">Exemplo: <code>bioimpedancia_tanita_joao_do_pe_de_feijao.csv</code> (Máx. 2MB)</div>
+                        <div class="selected-file-info" id="selected-file-info"></div>
+                    </div>
+
+                    <!-- 2. Bloco A: Estratégia Calórica -->
+                    <div class="section-selector">
+                        <div class="selector-header">
+                            <span style="font-size: 16px;">🎯</span>
+                            <div class="selector-header-title">Estratégia Calórica Prescrita</div>
+                            <span class="selector-header-badge">Seleção Única</span>
+                        </div>
+                        <div class="selector-grid">
+                            
+                            <label class="choice-card">
+                                <input type="radio" name="estrategia_calorica_form" value="Dieta Hipocalórica (Déficit -400 kcal | Emagrecimento / Definição)" checked>
+                                <div class="choice-content">
+                                    <div class="choice-text">
+                                        <span class="choice-icon">📉</span>
+                                        <span>Dieta Hipocalórica (Déficit -400 kcal | Emagrecimento / Definição)</span>
+                                    </div>
+                                    <span class="choice-badge">-400 kcal</span>
+                                </div>
+                            </label>
+
+                            <label class="choice-card">
+                                <input type="radio" name="estrategia_calorica_form" value="Dieta Normocalórica (Manutenção | Recomposição Corporal)">
+                                <div class="choice-content">
+                                    <div class="choice-text">
+                                        <span class="choice-icon">⚖️</span>
+                                        <span>Dieta Normocalórica (Manutenção | Recomposição Corporal)</span>
+                                    </div>
+                                    <span class="choice-badge">Manutenção</span>
+                                </div>
+                            </label>
+
+                            <label class="choice-card">
+                                <input type="radio" name="estrategia_calorica_form" value="Dieta Hipercalórica (Superávit +400 kcal | Hipertrofia Muscular)">
+                                <div class="choice-content">
+                                    <div class="choice-text">
+                                        <span class="choice-icon">📈</span>
+                                        <span>Dieta Hipercalórica (Superávit +400 kcal | Hipertrofia Muscular)</span>
+                                    </div>
+                                    <span class="choice-badge">+400 kcal</span>
+                                </div>
+                            </label>
+
+                        </div>
+                    </div>
+
+                    <!-- 3. Bloco B: Nível de Atividade Física Esportiva -->
+                    <div class="section-selector">
+                        <div class="selector-header">
+                            <span style="font-size: 16px;">🏃</span>
+                            <div class="selector-header-title">Nível de Atividade Física Esportiva</div>
+                            <span class="selector-header-badge">Fator Atividade</span>
+                        </div>
+                        <div class="selector-grid">
+                            
+                            <label class="choice-card">
+                                <input type="radio" name="nivel_atividade_form" value="Sedentário (1.2)">
+                                <div class="choice-content">
+                                    <div class="choice-text">
+                                        <span class="choice-icon">🛋️</span>
+                                        <span>1. Sedentário / Iniciante</span>
+                                    </div>
+                                    <span class="choice-badge">Fator 1.200</span>
+                                </div>
+                            </label>
+
+                            <label class="choice-card">
+                                <input type="radio" name="nivel_atividade_form" value="Levemente Ativo (1.375)">
+                                <div class="choice-content">
+                                    <div class="choice-text">
+                                        <span class="choice-icon">🚶</span>
+                                        <span>2. Levemente Ativo (1 a 3x/semana)</span>
+                                    </div>
+                                    <span class="choice-badge">Fator 1.375</span>
+                                </div>
+                            </label>
+
+                            <label class="choice-card">
+                                <input type="radio" name="nivel_atividade_form" value="Moderadamente Ativo (1.55)" checked>
+                                <div class="choice-content">
+                                    <div class="choice-text">
+                                        <span class="choice-icon">🚴</span>
+                                        <span>3. Moderadamente Ativo (3 a 5x/semana)</span>
+                                    </div>
+                                    <span class="choice-badge">Fator 1.550</span>
+                                </div>
+                            </label>
+
+                            <label class="choice-card">
+                                <input type="radio" name="nivel_atividade_form" value="Muito Ativo (1.725)">
+                                <div class="choice-content">
+                                    <div class="choice-text">
+                                        <span class="choice-icon">🏊</span>
+                                        <span>4. Muito Ativo / Atleta Amador (6 a 7x/semana)</span>
+                                    </div>
+                                    <span class="choice-badge">Fator 1.725</span>
+                                </div>
+                            </label>
+
+                            <label class="choice-card">
+                                <input type="radio" name="nivel_atividade_form" value="Extremamente Ativo (1.9)">
+                                <div class="choice-content">
+                                    <div class="choice-text">
+                                        <span class="choice-icon">⚡</span>
+                                        <span>5. Extremamente Ativo / Elite (2 turnos)</span>
+                                    </div>
+                                    <span class="choice-badge">Fator 1.900</span>
+                                </div>
+                            </label>
+
+                        </div>
+                    </div>
+
+                    <!-- 4. Bloco C: Condições Clínicas e Restrições Alimentares -->
+                    <div class="section-selector">
+                        <div class="selector-header">
+                            <span style="font-size: 16px;">🩺</span>
+                            <div class="selector-header-title">Condições Clínicas e Restrições Alimentares</div>
+                            <span class="selector-header-badge">Múltipla Escolha</span>
+                        </div>
+                        <div class="selector-grid">
+                            
+                            <!-- Opção Exclusiva -->
+                            <label class="choice-card exclusive-choice">
+                                <input type="checkbox" name="restricoes_clinicas_form" value="Nenhuma restrição clínica ou alimentar" id="chk_nenhuma" checked>
+                                <div class="choice-content">
+                                    <div class="choice-text">
+                                        <span class="choice-icon">✅</span>
+                                        <span>Nenhuma restrição alimentar / Sem comorbidades</span>
+                                    </div>
+                                    <span class="choice-badge" style="background: #10b981; color: #fff;">Padrão</span>
+                                </div>
+                            </label>
+
+                            <!-- Restrições Clínicas Específicas -->
+                            <label class="choice-card">
+                                <input type="checkbox" name="restricoes_clinicas_form" value="Hipertensão Arterial (Controle de Sódio / DASH)" class="restr-clinica-item" id="chk_restr_1">
+                                <div class="choice-content">
+                                    <div class="choice-text">
+                                        <span class="choice-icon">❤️</span>
+                                        <span>Hipertensão Arterial (Controle de Sódio / Protocolo DASH)</span>
+                                    </div>
+                                    <span class="choice-badge">Baixo Sódio</span>
+                                </div>
+                            </label>
+
+                            <label class="choice-card">
+                                <input type="checkbox" name="restricoes_clinicas_form" value="Diabetes / Resistência à Insulina (Baixo Índice Glicêmico)" class="restr-clinica-item" id="chk_restr_2">
+                                <div class="choice-content">
+                                    <div class="choice-text">
+                                        <span class="choice-icon">🩸</span>
+                                        <span>Diabetes / Resistência à Insulina (Baixo Índice Glicêmico)</span>
+                                    </div>
+                                    <span class="choice-badge">Baixo IG</span>
+                                </div>
+                            </label>
+
+                            <label class="choice-card">
+                                <input type="checkbox" name="restricoes_clinicas_form" value="Dislipidemia / Colesterol ou Triglicerídeos Elevados" class="restr-clinica-item" id="chk_restr_3">
+                                <div class="choice-content">
+                                    <div class="choice-text">
+                                        <span class="choice-icon">🫀</span>
+                                        <span>Dislipidemia / Colesterol ou Triglicerídeos Elevados</span>
+                                    </div>
+                                    <span class="choice-badge">Lipídios Controlados</span>
+                                </div>
+                            </label>
+
+                            <label class="choice-card">
+                                <input type="checkbox" name="restricoes_clinicas_form" value="Intolerância à Lactose / Restrição de Laticínios" class="restr-clinica-item" id="chk_restr_4">
+                                <div class="choice-content">
+                                    <div class="choice-text">
+                                        <span class="choice-icon">🥛</span>
+                                        <span>Intolerância à Lactose / Restrição de Laticínios</span>
+                                    </div>
+                                    <span class="choice-badge">Zero Lactose</span>
+                                </div>
+                            </label>
+
+                            <label class="choice-card">
+                                <input type="checkbox" name="restricoes_clinicas_form" value="Sensibilidade ao Glúten / Gastrite e Refluxo" class="restr-clinica-item" id="chk_restr_5">
+                                <div class="choice-content">
+                                    <div class="choice-text">
+                                        <span class="choice-icon">🌾</span>
+                                        <span>Sensibilidade ao Glúten / Gastrite e Refluxo</span>
+                                    </div>
+                                    <span class="choice-badge">Sem Glúten</span>
+                                </div>
+                            </label>
+
+                        </div>
+                    </div>
+
+                    <!-- Botão de Envio -->
+                    <button type="submit" class="btn-gerar-plano">
+                        <span>⚡</span> Processar Bioimpedância & Gerar Plano com IA
+                    </button>
+                </form>
+
+                <div class="box-owasp-info">
+                    🔒 <strong>Segurança & OWASP Top 10:2025:</strong> Limite de upload de 2MB, higienização de inputs via <code>html.escape()</code>, proteção estrita contra Timing Attacks e controle de força bruta com bloqueio em HTTP 429.
+                </div>
+            </section>
+
+            <!-- Coluna 2: Informações Técnicas da Tanita 8 Eletrodos -->
+            <section class="card" style="height: fit-content;">
+                <div class="card-header">
+                    <span class="card-header-icon">🔬</span>
+                    <div>
+                        <h2 class="card-title">Tecnologia Tanita</h2>
+                        <p class="card-subtitle">Bioimpedância Segmental de Alta Precisão</p>
+                    </div>
+                </div>
+
+                <div class="info-pills">
+                    <div class="info-pill">
+                        <div class="info-pill-icon">⚡</div>
+                        <div>
+                            <div class="info-pill-title">8 Eletrodos de Dupla Frequência</div>
+                            <div class="info-pill-desc">Correntes independentes nos membros superiores, inferiores e tronco, eliminando variações de hidratação e aferindo assimetrias bilaterais.</div>
+                        </div>
+                    </div>
+
+                    <div class="info-pill">
+                        <div class="info-pill-icon">🔥</div>
+                        <div>
+                            <div class="info-pill-title">Equação de Katch-McArdle</div>
+                            <div class="info-pill-desc">Cálculo metabólico baseado na Massa Livre de Gordura (MLG), gerando a TMB mais fidedigna para atletas e praticantes de musculação.</div>
+                        </div>
+                    </div>
+
+                    <div class="info-pill">
+                        <div class="info-pill-icon">🎯</div>
+                        <div>
+                            <div class="info-pill-title">Gasto Energético Total (GET)</div>
+                            <div class="info-pill-desc">Integração do fator esportivo (1.2 a 1.9) com a TMB para calcular o balanço energético exato: déficit (-400 kcal) ou superávit (+400 kcal).</div>
+                        </div>
+                    </div>
+
+                    <div class="info-pill">
+                        <div class="info-pill-icon">🤖</div>
+                        <div>
+                            <div class="info-pill-title">Inteligência Artificial (Groq)</div>
+                            <div class="info-pill-desc">Adaptação estrita de micronutrientes, alimentos regionais e horários em função das comorbidades clínicas selecionadas.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+    </main>
+
+    <!-- Rodapé Acadêmico -->
+    <footer class="footer">
+        Universidade Estadual de Ciências da Saúde de Alagoas (UNCISAL) • Pós-Graduação em Segurança da Informação<br>
+        Projeto Aplicado: Práticas de Mercado • Aluna: <strong>Silvia Millena Rocha Torres</strong>
+    </footer>
+
+    <!-- Lógica JavaScript dos Seletores e Upload -->
+    <script>
+        function atualizarNomeArquivo(input) {
+            const infoDiv = document.getElementById('selected-file-info');
+            if (input.files && input.files[0]) {
+                infoDiv.style.display = 'block';
+                infoDiv.innerHTML = '📄 Arquivo selecionado: <strong>' + input.files[0].name + '</strong> (' + (input.files[0].size / 1024).toFixed(1) + ' KB)';
+            } else {
+                infoDiv.style.display = 'none';
+            }
+        }
+
+        // Lógica de Exclusividade Mútua das Restrições Clínicas
+        document.addEventListener('DOMContentLoaded', function() {
+            const chkNenhuma = document.getElementById('chk_nenhuma');
+            const restrCheckboxes = document.querySelectorAll('.restr-clinica-item');
+
+            // Quando clica em "Nenhuma restrição"
+            chkNenhuma.addEventListener('change', function() {
+                if (this.checked) {
+                    restrCheckboxes.forEach(function(cb) {
+                        cb.checked = false;
+                    });
+                } else {
+                    // Se desmarcar sem ter nenhuma outra marcada, mantém marcada
+                    const algumaMarcada = Array.from(restrCheckboxes).some(function(cb) { return cb.checked; });
+                    if (!algumaMarcada) {
+                        this.checked = true;
+                    }
+                }
+            });
+
+            // Quando clica em qualquer uma das 5 restrições clínicas
+            restrCheckboxes.forEach(function(cb) {
+                cb.addEventListener('change', function() {
+                    if (this.checked) {
+                        chkNenhuma.checked = false;
+                    } else {
+                        // Se desmarcar todas as 5, volta a marcar "Nenhuma restrição"
+                        const algumaMarcada = Array.from(restrCheckboxes).some(function(c) { return c.checked; });
+                        if (!algumaMarcada) {
+                            chkNenhuma.checked = true;
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

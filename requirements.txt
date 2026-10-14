@@ -1,0 +1,8 @@
+flask
+werkzeug
+python-dotenv
+openai
+pandas
+markdown
+markupsafe
+gunicorn

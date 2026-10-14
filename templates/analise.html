@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plano e Parecer Clínico - Bioimpedância Tanita</title>
+    <!-- Google Fonts Inter e Montserrat -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #059669;
+            --primary-dark: #047857;
+            --primary-light: #ecfdf5;
+            --secondary: #0284c7;
+            --secondary-light: #e0f2fe;
+            --dark: #0f172a;
+            --gray-100: #f8fafc;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-600: #475569;
+            --gray-800: #1e293b;
+            --warning-bg: #fffbeb;
+            --warning-border: #fcd34d;
+            --warning-text: #b45309;
+            --danger-bg: #fef2f2;
+            --danger-text: #b91c1c;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9;
+            color: #1e293b;
+            line-height: 1.6;
+            padding: 24px 16px;
+        }
+
+        .container {
+            max-width: 1040px;
+            margin: 0 auto;
+        }
+
+        /* Barra de Ações Topo */
+        .actions-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-voltar {
+            background-color: #ffffff;
+            color: var(--gray-800);
+            border: 1px solid var(--gray-300);
+        }
+
+        .btn-voltar:hover {
+            background-color: var(--gray-100);
+            border-color: var(--gray-600);
+        }
+
+        .btn-imprimir {
+            background-color: var(--primary);
+            color: #ffffff;
+            box-shadow: 0 4px 6px -1px rgba(5, 150, 105, 0.25);
+        }
+
+        .btn-imprimir:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        /* Card Principal */
+        .card-clinico {
+            background: #ffffff;
+            border-radius: 16px;
+            border: 1px solid var(--gray-200);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            padding: 36px;
+            margin-bottom: 30px;
+        }
+
+        /* Cabeçalho do Laudo */
+        .header-laudo {
+            border-bottom: 2px solid var(--gray-200);
+            padding-bottom: 20px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header-title h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--dark);
+            letter-spacing: -0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--gray-600);
+        }
+
+        .badge-paciente {
+            background: var(--primary-light);
+            border: 1px solid #a7f3d0;
+            color: var(--primary-dark);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* Alerta de Dispersão Segmental */
+        .alerta-box {
+            background-color: var(--warning-bg);
+            border: 1.5px solid var(--warning-border);
+            color: var(--warning-text);
+            padding: 16px 20px;
+            border-radius: 10px;
+            margin-bottom: 26px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .alerta-box-icon {
+            font-size: 24px;
+        }
+
+        /* Grid dos Cards Calculados do Bloco 8 */
+        .bloco8-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .grid-bloco8 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--gray-100);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .stat-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+
+        .stat-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--gray-600);
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--dark);
+        }
+
+        .stat-unit {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--gray-600);
+            margin-left: 2px;
+        }
+
+        .stat-sub {
+            font-size: 11px;
+            color: var(--gray-600);
+            margin-top: 4px;
+        }
+
+        /* Área do Rascunho Clínico da IA */
+        .conteudo-markdown {
+            background: #ffffff;
+            padding: 28px;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--gray-800);
+        }
+
+        .conteudo-markdown h1,
+        .conteudo-markdown h2,
+        .conteudo-markdown h3,
+        .conteudo-markdown h4 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--dark);
+            margin-top: 24px;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .conteudo-markdown h2 {
+            border-bottom: 1.5px solid var(--gray-200);
+            padding-bottom: 8px;
+            color: var(--primary-dark);
+            font-size: 18px;
+        }
+
+        .conteudo-markdown p {
+            margin-bottom: 14px;
+        }
+
+        .conteudo-markdown ul,
+        .conteudo-markdown ol {
+            margin-left: 24px;
+            margin-bottom: 16px;
+        }
+
+        .conteudo-markdown li {
+            margin-bottom: 6px;
+        }
+
+        /* Tabelas Markdown Estilizadas */
+        .conteudo-markdown table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 13px;
+        }
+
+        .conteudo-markdown th,
+        .conteudo-markdown td {
+            border: 1px solid var(--gray-200);
+            padding: 10px 14px;
+            text-align: left;
+        }
+
+        .conteudo-markdown th {
+            background-color: var(--primary);
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .conteudo-markdown tr:nth-child(even) {
+            background-color: var(--gray-100);
+        }
+
+        /* Tabela Completa Tanita */
+        .tabela-wrapper {
+            overflow-x: auto;
+            border: 1px solid var(--gray-200);
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .tabela-tanita {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            background: #ffffff;
+            white-space: nowrap;
+        }
+
+        .tabela-tanita th,
+        .tabela-tanita td {
+            border: 1px solid var(--gray-200);
+            padding: 8px 12px;
+            text-align: left;
+        }
+
+        .tabela-tanita th {
+            background-color: var(--dark);
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .tabela-tanita tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        /* Detalhes do Prompt Retrátil */
+        details {
+            margin-top: 24px;
+            background: #f8fafc;
+            border: 1px solid var(--gray-200);
+            border-radius: 10px;
+            padding: 14px 18px;
+        }
+
+        details summary {
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--secondary);
+            outline: none;
+        }
+
+        details summary:hover {
+            color: #0369a1;
+        }
+
+        .prompt-box {
+            margin-top: 12px;
+            padding: 14px;
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            line-height: 1.5;
+            max-height: 320px;
+            overflow-y: auto;
+        }
+
+        /* Estilos de Impressão */
+        @media print {
+            body {
+                background: #ffffff;
+                padding: 0;
+                color: #000000;
+            }
+            .actions-bar, details, footer {
+                display: none !important;
+            }
+            .card-clinico {
+                box-shadow: none;
+                border: none;
+                padding: 0;
+            }
+            .conteudo-markdown {
+                border: none;
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <!-- Barra de Ações -->
+        <div class="actions-bar">
+            <a href="/" class="btn btn-voltar">
+                ⬅️ Voltar ao Painel
+            </a>
+            <button onclick="window.print()" class="btn btn-imprimir">
+                🖨️ Imprimir / Salvar PDF Clínico
+            </button>
+        </div>
+
+        <!-- Card Clínico Principal -->
+        <main class="card-clinico">
+            
+            <!-- Cabeçalho do Laudo -->
+            <header class="header-laudo">
+                <div class="header-title">
+                    <h1>Assessoria de Nutrição Clínica & Bioimpedância</h1>
+                    <p>Avaliação Segmental com Balança Tanita (8 Eletrodos de Dupla Frequência)</p>
+                </div>
+                <div class="badge-paciente">
+                    👤 <strong>{{ paciente.nome_paciente }}</strong> ({{ paciente.id_paciente }}) • {{ paciente.idade }} anos • {{ paciente.sexo_biologico }}
+                </div>
+            </header>
+
+            <!-- Banner de Conduta Prescrita e Restrições Clínicas -->
+            <div style="background: #f8fafc; border: 1px solid var(--gray-200); border-radius: 12px; padding: 18px 20px; margin-bottom: 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px;">
+                <div>
+                    <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--gray-600);">Estratégia Calórica Prescrita</div>
+                    <div style="font-size: 14px; font-weight: 700; color: var(--primary-dark); margin-top: 2px;">{{ bloco8.estrategia_calorica or paciente.estrategia_calorica }}</div>
+                </div>
+                <div>
+                    <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--gray-600);">Nível de Atividade Física</div>
+                    <div style="font-size: 14px; font-weight: 700; color: var(--dark); margin-top: 2px;">{{ bloco8.nivel_atividade }} (Fator {{ bloco8.fator_atividade }})</div>
+                </div>
+                <div>
+                    <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--gray-600);">Condições Clínicas & Restrições</div>
+                    <div style="font-size: 13px; font-weight: 600; color: #b45309; margin-top: 2px;">
+                        {% if bloco8.restricoes_clinicas %}
+                            {% for r in bloco8.restricoes_clinicas %}
+                                <span style="display: inline-block; background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 6px; font-size: 11px; margin-right: 4px; margin-bottom: 4px;">{{ r }}</span>
+                            {% endfor %}
+                        {% else %}
+                            <span style="color: var(--primary-dark);">Nenhuma restrição clínica</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alerta Segmental em Destaque -->
+            {% if bloco8.alerta_segmental %}
+            <div class="alerta-box">
+                <span class="alerta-box-icon">⚠️</span>
+                <div>
+                    <div><strong>Parecer Segmental da Bioimpedância:</strong></div>
+                    <div>{{ bloco8.alerta_segmental }}</div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Cards com Cálculos Fisiológicos Automáticos (Bloco 8) -->
+            <h2 class="bloco8-title">⚡ Parâmetros Fisiológicos & Balanço Energético (Bloco 8)</h2>
+            <div class="grid-bloco8">
+                
+                <div class="stat-card" style="border-left: 4px solid var(--accent);">
+                    <div class="stat-label">Gasto Energético Total (GET)</div>
+                    <div class="stat-value" style="color: var(--accent);">{{ bloco8.get_kcal }}<span class="stat-unit">kcal</span></div>
+                    <div class="stat-sub">TMB Katch × Fator {{ bloco8.fator_atividade }}</div>
+                </div>
+
+                <div class="stat-card" style="border-left: 4px solid var(--primary);">
+                    <div class="stat-label">Meta Calórica Alvo Diária</div>
+                    <div class="stat-value" style="color: var(--primary-dark);">{{ bloco8.meta_calorica_kcal }}<span class="stat-unit">kcal</span></div>
+                    <div class="stat-sub">Ajuste da estratégia calórica prescrita</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-label">TMB Katch-McArdle</div>
+                    <div class="stat-value">{{ bloco8.tmb_katch_kcal }}<span class="stat-unit">kcal</span></div>
+                    <div class="stat-sub">Baseada na MLG (vs Tanita: {{ bloco8.tmb_tanita_kcal }} kcal)</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-label">Massa Gorda Total</div>
+                    <div class="stat-value">{{ bloco8.massa_gorda_kg }}<span class="stat-unit">kg</span></div>
+                    <div class="stat-sub">{{ bloco8.peso_kg }} kg ({{ bloco8.perc_gordura_total or '14.8' }}% gordura)</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-label">Massa Livre de Gordura (MLG)</div>
+                    <div class="stat-value">{{ bloco8.massa_livre_gordura_kg }}<span class="stat-unit">kg</span></div>
+                    <div class="stat-sub">Massa magra metabolicamente ativa</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-label">Gordura no Tronco</div>
+                    <div class="stat-value">{{ bloco8.perc_gordura_tronco }}<span class="stat-unit">%</span></div>
+                    <div class="stat-sub">Média dos 4 membros: {{ bloco8.media_membros }}%</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-label">Idade Metabólica</div>
+                    <div class="stat-value">{{ bloco8.idade_metabolica_anos }}<span class="stat-unit">anos</span></div>
+                    <div class="stat-sub">Gordura Visceral: Nível {{ bloco8.gordura_visceral_rating }}</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-label">Hidratação & Meta</div>
+                    <div class="stat-value">{{ bloco8.meta_agua_litros_dia }}<span class="stat-unit">L/dia</span></div>
+                    <div class="stat-sub">Água corporal atual: {{ bloco8.perc_agua_corporal }}%</div>
+                </div>
+
+            </div>
+
+            <!-- Rascunho Clínico Individualizado Gerado pela IA -->
+            <h2 class="bloco8-title">🥗 Programa Alimentar e Conduta Nutricional (3 Meses)</h2>
+            <div class="conteudo-markdown">
+                {% if resposta %}
+                    {{ resposta }}
+                {% else %}
+                    <p style="color: #b91c1c; font-weight: 600;">O servidor da Groq está indisponível no momento. Veja abaixo o prompt clínico preparado:</p>
+                    <div class="prompt-box">{{ prompt }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Dados Brutos Sanitizados do Arquivo CSV Tanita -->
+            <details>
+                <summary>📊 Visualizar Tabela Sanitizada do Arquivo CSV da Tanita (33 Colunas)</summary>
+                <div class="tabela-wrapper">
+                    {{ tabela }}
+                </div>
+            </details>
+
+            <!-- Prompt Fisiológico Enviado ao LLM para Auditoria -->
+            <details>
+                <summary>🔍 Visualizar Prompt Fisiológico Completo Enviado à Groq</summary>
+                <div class="prompt-box">{{ prompt }}</div>
+            </details>
+
+        </main>
+
+        <!-- Rodapé Acadêmico -->
+        <footer style="text-align: center; font-size: 12px; color: #64748b; margin-top: 20px;">
+            Projeto Aplicado: Práticas de Mercado • UNCISAL • Aluna: <strong>Silvia Millena Rocha Torres</strong>
+        </footer>
+
+    </div>
+
+</body>
+</html>
