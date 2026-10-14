@@ -37,9 +37,10 @@ jobs:
             mkdir -p /home/ubuntu/app_nutricao
             cd /home/ubuntu/app_nutricao
 
-            # Se já for um repositório git, atualiza; caso contrário, prepara
+            # Se já for um repositório git, atualiza forçando sincronização com a origin; caso contrário, prepara
             if [ -d ".git" ]; then
-              git pull origin main
+              git fetch origin main
+              git reset --hard origin/main
             else
               # Se ainda não houver git clonado na VM, clona do seu repositório público
               git clone https://github.com/silviamillena/projeto-aplicado-assessoria-nutri.git .
