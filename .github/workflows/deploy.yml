@@ -64,5 +64,8 @@ jobs:
             pip install --upgrade pip
             pip install -r requirements.txt
 
+            # Reinicia o serviço Gunicorn para aplicar as novas alterações de templates e código
+            sudo systemctl restart gunicorn
+
             echo "Deploy concluído com sucesso no servidor Oracle Cloud!"
           EOF
